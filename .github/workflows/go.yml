@@ -33,3 +33,11 @@ jobs:
           asset_path: ./build/aes_for_Windows64.exe # 替换为您的二进制文件路径
           asset_name: aes_for_Windows64.exe # 替换为您的二进制文件名称
           asset_content_type: application/octet-stream
+
+      - name: Upload macOS AMD64 Binary
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./build/aes_for_macOS_AMD64
+          asset_name: aes_for_macOS_AMD64
+          asset_content_type: application/octet-stream
