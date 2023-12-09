@@ -20,6 +20,9 @@ jobs:
         env:
           BUILD_ALL_PLATFORMS: true
 
+      - name: List files in build directory
+        run: ls -l ./build/
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
