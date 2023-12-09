@@ -36,6 +36,8 @@ jobs:
 
       - name: Upload macOS AMD64 Binary
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./build/aes_for_macOS_AMD64
