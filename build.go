@@ -11,6 +11,38 @@ import (
 )
 
 func main() {
+	buildAll := os.Getenv("BUILD_ALL_PLATFORMS") == "true"
+
+	if buildAll {
+		buildForAllPlatforms()
+	} else {
+		performInteractiveBuild()
+	}
+}
+
+func buildForAllPlatforms() {
+	configs := []struct {
+		goos   string
+		goarch string
+		output string
+	}{
+		{"windows", "amd64", "aes_for_Windows64.exe"},
+		{"windows", "386", "aes_for_Windows32.exe"},
+		{"darwin", "amd64", "aes_for_macOS_AMD64"},
+		{"darwin", "arm64", "aes_for_macOS_ARM64"},
+		{"linux", "amd64", "aes_for_Linux64"},
+		{"linux", "386", "aes_for_Linux32"},
+		{"linux", "arm", "aes_for_Linux_ARM"},
+	}
+
+	for _, cfg := range configs {
+		fmt.Printf("正在编译: %s\n", cfg.output)
+		buildAndCompile(cfg.goos, cfg.goarch, filepath.Join("build", cfg.output))
+	}
+	fmt.Println("所有平台编译完成.")
+}
+
+func performInteractiveBuild() {
 	fmt.Println("请选择目标平台:")
 	fmt.Println("1. Windows 64位")
 	fmt.Println("2. Windows 32位")
@@ -63,27 +95,7 @@ func main() {
 		goarch = "arm"
 		output = "aes_for_Linux_ARM"
 	case 8:
-		// 定义所有平台的配置
-		configs := []struct {
-			goos   string
-			goarch string
-			output string
-		}{
-			{"windows", "amd64", "aes_for_Windows64.exe"},
-			{"windows", "386", "aes_for_Windows32.exe"},
-			{"darwin", "amd64", "aes_for_macOS_AMD64"},
-			{"darwin", "arm64", "aes_for_macOS_ARM64"},
-			{"linux", "amd64", "aes_for_Linux64"},
-			{"linux", "386", "aes_for_Linux32"},
-			{"linux", "arm", "aes_for_Linux_ARM"},
-		}
-
-		// 遍历所有配置并编译
-		for _, cfg := range configs {
-			fmt.Printf("正在编译: %s\n", cfg.output)
-			buildAndCompile(cfg.goos, cfg.goarch, filepath.Join(buildDir, cfg.output))
-		}
-		fmt.Println("所有平台编译完成.")
+		buildForAllPlatforms()
 		return
 	default:
 		fmt.Println("无效选择")

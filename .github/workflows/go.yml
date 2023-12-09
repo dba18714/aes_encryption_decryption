@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: go run build.go
         env:
-          GOOS: all # 为所有平台编译
+          BUILD_ALL_PLATFORMS: true
 
       - name: Upload Release Asset
         id: upload-release-asset
