@@ -1,0 +1,27 @@
+name: Go Build for Multiple Platforms
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.21' # 您的 Go 版本
+
+      - name: Build for All Platforms
+        run: go run build.go
+        env:
+          GOOS: all # 指示 build.go 为所有平台编译
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Compiled Binaries
+          path: build/ # 构建产物的存放目录
